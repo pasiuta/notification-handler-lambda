@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Notification Handler Lambda - validates, normalizes and stores notification events
+
+Resources:
+  EventsDLQ:
+    Type: AWS::SQS::Queue # messages that keep failing (DB down) end up here instead of looping forever
+
+  EventsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 180 # at least 6x the function timeout (AWS recommendation)
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt EventsDLQ.Arn
+        maxReceiveCount: 5
+
+  NotificationHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app/handler.handler
+      Runtime: nodejs22.x
+      Architectures: [arm64]
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          DB_CONCURRENCY: 5
+          # DATABASE_URL: inject from AWS Secrets Manager, never hard-code it here
+      Events:
+        Stream:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt EventsQueue.Arn
+            BatchSize: 100
+            MaximumBatchingWindowInSeconds: 5
+            FunctionResponseTypes: [ReportBatchItemFailures] # retry only failed messages
