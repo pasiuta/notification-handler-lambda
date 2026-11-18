@@ -19,6 +19,6 @@ export async function insertToMySQL(row) {
   const { sql, params } = buildInsert(row);
   await new Promise((resolve) => setImmediate(resolve)); // simulate async I/O
   const insertId = ++autoIncrement;
-  logger.debug('MySQL insert', { sql, params, insertId });
+  logger.debug('MySQL insert', { sql, paramCount: params.length, insertId }); // params hold PII: not logged
   return { insertId };
 }
