@@ -1,3 +1,5 @@
+import { toIsoDate } from './date.js';
+
 // A rule is a pure function: (rawValue) => { value } | { error }.
 // Rules can be combined in a schema, and a new rule is just one more small function.
 const ok = (value) => ({ value });
@@ -11,6 +13,11 @@ export const text = (v) =>
 
 export const email = (v) =>
   typeof v === 'string' && EMAIL.test(v.trim()) ? ok(v.trim().toLowerCase()) : fail('must be a valid email');
+
+export const isoDate = (v) => {
+  const iso = toIsoDate(v);
+  return iso ? ok(iso) : fail('must be a valid date');
+};
 
 // "admin, editor , manager" | ["viewer", " "] | null  ->  ["admin", "editor", "manager"] | ["viewer"] | []
 // Trimmed, lowercased, without blanks or duplicates.
