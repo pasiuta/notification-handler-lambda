@@ -1,0 +1,16 @@
+{
+  "Records": [
+    {
+      "messageId": "msg-1",
+      "body": "{\"type\":\"password_reset\",\"email\":\"Frank@Example.com\",\"requested\":\"2021-08-01T09:00:00Z\"}"
+    },
+    {
+      "messageId": "msg-2",
+      "body": "this is not json"
+    },
+    {
+      "messageId": "msg-3",
+      "body": "{\"type\":\"user_registered\",\"name\":\"Grace\",\"email\":\"grace@example.com\",\"roles\":[\"Admin\",\"admin\",\" Editor \"],\"joined\":\"March 3rd, 2022 08:15 GMT\",\"event_id\":\"evt-42\"}"
+    }
+  ]
+}
