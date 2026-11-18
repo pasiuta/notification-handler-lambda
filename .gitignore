@@ -1,0 +1,6 @@
+node_modules/
+.env
+.aws-sam/
+function.zip
+*.log
+.DS_Store

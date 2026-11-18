@@ -1,0 +1,17 @@
+{
+  "name": "notification-handler-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda that validates, normalizes and stores a stream of semi-structured notification events (MySQL simulated).",
+  "type": "module",
+  "main": "app/handler.js",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "start": "node app/run.js --input sample/events.json --log-level INFO",
+    "test": "node --test",
+    "package": "zip -qr function.zip app package.json"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
